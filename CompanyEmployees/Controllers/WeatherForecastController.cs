@@ -11,7 +11,7 @@ namespace CompanyEmployees.Controllers
         private readonly IRepositoryManager _repository;
         public WeatherForecastController(IRepositoryManager repository)
         {
-            _repository =repository
+            _repository = repository;
         }
         private static readonly string[] Summaries = new[]
         {
