@@ -33,5 +33,8 @@ namespace CompanyEmployees.Extensions
              b.MigrationsAssembly("CompanyEmployees")));
         public static void ConfigureRepositoryManger(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+        public static IMvcBuilder AddCustomCSVFormater(this IMvcBuilder builder) =>
+            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+
     }
 }

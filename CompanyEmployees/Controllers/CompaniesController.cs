@@ -32,5 +32,20 @@ namespace CompanyEmployees.Controllers
                 return Ok(companiesDto);
           
         }
+        [HttpGet("{Id}")]
+        public ActionResult GetCompany(Guid id)
+        {
+            var company = _repository.Company.GetCompany(id, trackchanges: false);
+            if(company== null)
+            {
+                _logger.LogInfo($"Company with id: {id} doesn't exist in teh DataBase");
+                return NotFound();
+            }
+            else
+            {
+                var companyDto = _mapper.Map<CompanyDto>(company);
+                return Ok(companyDto);
+            }
+        }
     }
 }
