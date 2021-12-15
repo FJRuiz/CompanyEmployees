@@ -15,5 +15,11 @@ namespace Repository
             :base(repositoryContext)
         {
         }
+
+        public IEnumerable<Company> GetAllCompanies(bool trackchanges) =>
+            FindAll(trackchanges)
+            .OrderBy(c => c.Name)
+            .ToList();
+        
     }
 }
