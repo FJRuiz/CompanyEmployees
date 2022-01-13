@@ -10,10 +10,10 @@ namespace Contracts
 {
     public interface ICompanyRepository
     {
-        IEnumerable<Company> GetAllCompanies(bool trackchanges);
-        Company GetCompany(Guid companyId, bool trackchanges);
+        Task<IEnumerable<Company>> GetAllCompanies(bool trackchanges);
+        Task<Company> GetCompany(Guid companyId, bool trackchanges);
         void CreateCompany(Company company);
-        IEnumerable<Company> GetByIds(IEnumerable<Guid> ids, bool trackchanges);
+        Task<IEnumerable<Company>>  GetByIds(IEnumerable<Guid> ids, bool trackchanges);
         void DeleteCompany(Company company);
 
         
