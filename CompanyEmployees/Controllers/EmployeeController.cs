@@ -3,6 +3,7 @@ using CompanyEmployees.ActionFilters;
 using Contracts;
 using Entities.DataTransferObject;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,7 +30,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(Guid companyId)
+        public async Task<IActionResult> Index(Guid companyId, [FromQuery]
+        EmployeeParameters employeeParameters)
         {
             var company = await  _repository.Company.GetCompany(companyId, trackchanges: false);
             if (company == null)
@@ -38,7 +40,7 @@ namespace CompanyEmployees.Controllers
                 return NotFound();
             }
             _logger.LogInfo("compañia encontrada");
-            var employeesFromDb = await _repository.Employee.GetEmployees(companyId, trackChanges: false);
+            var employeesFromDb = await _repository.Employee.GetEmployeesAsync(companyId, employeeParameters, trackChanges: false);
 
             var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
 
@@ -46,7 +48,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet("{Id}", Name = "GetEmployeeForCompany")]
-        public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid Id)
+        public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, [FromQuery] 
+        EmployeeParameters employeeParameters)
         {
             var company = await _repository.Company.GetCompany(companyId, trackchanges: false);
             if (company == null)
@@ -55,12 +58,9 @@ namespace CompanyEmployees.Controllers
                 return NotFound();
             }
             
-            var employeeDb = await _repository.Employee.GetEmployee(companyId, Id, trackChanges: false);
-            if(employeeDb == null)
-            {
-                _logger.LogInfo($"employee with id: {Id} doesn't exist in the DataBase");
-                return NotFound();
-            }
+            var employeeDb = await _repository.Employee.GetEmployeesAsync(companyId, 
+                employeeParameters, trackChanges: false);
+                        
             var employee = _mapper.Map<EmployeeDto>(employeeDb);
             return Ok(employee);
         }

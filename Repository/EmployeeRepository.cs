@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,16 @@ namespace Repository
             :base(repositoryContext)
         {
         }
-        public async Task<IEnumerable<Employee>> GetEmployees(Guid companyId, bool trackChanges) =>
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId,
+            EmployeeParameters employeeParameters, bool trackChanges) =>
             await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
             .OrderBy(e => e.Name)
+            .Skip((employeeParameters.PageNumber -1)*(employeeParameters.PageSize))
+            .Take(employeeParameters.PageSize)
             .ToListAsync();
         
 
-        public async Task<Employee> GetEmployee(Guid companyId, Guid Id, bool trackChanges) =>
+        public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid Id, bool trackChanges) =>
             await FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(Id),
                 trackChanges)
             .SingleOrDefaultAsync();
