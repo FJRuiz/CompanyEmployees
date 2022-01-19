@@ -22,7 +22,8 @@ namespace CompanyEmployees
             CreateMap<EmployeeForCreationDto, Employee>();
             // ReverseMap() hace un mapeo de las clases en ambos sentidos
             CreateMap<EmployeeForUpdateDto, Employee>().ReverseMap();
-            CreateMap<CompanyForUpdateDto, Company>().ReverseMap();        
+            CreateMap<CompanyForUpdateDto, Company>().ReverseMap();
+            CreateMap<UserForRegistrationDto, User>();
         }
     }
 }

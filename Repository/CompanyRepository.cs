@@ -1,7 +1,9 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +14,19 @@ namespace Repository
     public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
         public CompanyRepository(RepositoryContext repositoryContext)
-            :base(repositoryContext)
+            : base(repositoryContext)
         {
         }
 
-        public async Task<IEnumerable<Company>> GetAllCompanies(bool trackchanges) =>
-            await FindAll(trackchanges)
-            .OrderBy(c => c.Name)
+        public async Task<IEnumerable<Company>> GetAllCompanies(CompanyParameters companyParameters, bool trackchanges)
+        { 
+            var companies = await FindAll(trackchanges)           
+            .Search(companyParameters.SearchTerm)
+            .Sort((companyParameters.OrderBy))
             .ToListAsync();
+
+            return companies;
+            }
 
         public async Task<Company> GetCompany(Guid companyId, bool trackchanges) =>
             await FindByCondition(c => c.Id.Equals(companyId), trackchanges)

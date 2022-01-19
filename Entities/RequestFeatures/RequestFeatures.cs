@@ -22,8 +22,31 @@ namespace Entities.RequestFeatures
                 _pageSize = (value > maxPagSize) ? maxPagSize : value;
             }
         }
+        public string OrderBy { get; set; }
     }
     public class EmployeeParameters : RequestFeatures
-    { 
+    {
+        public EmployeeParameters()
+        {
+            OrderBy = "name";
+        }
+        public uint MinAge { get; set; }
+        public uint MaxAge { get; set; }
+
+        public bool ValidAgeRange => MaxAge > MinAge;
+
+        public string SearchTerm { get; set; }
+
+    }
+
+    public class CompanyParameters : RequestFeatures
+    {
+        public CompanyParameters()
+        {
+            OrderBy = "name";
+        }
+
+        public string SearchTerm { get; set; }
+
     }
 }

@@ -9,6 +9,8 @@ using AutoMapper;
 using Entities.Models;
 using CompanyEmployees.ModelBinders;
 using CompanyEmployees.ActionFilters;
+using Entities.RequestFeatures;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CompanyEmployees.Controllers
 {
@@ -26,11 +28,10 @@ namespace CompanyEmployees.Controllers
             _logger = logger;
             _mapper = mapper;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetCompanies()
+        [HttpGet (Name = "GetCompanies"), Authorize]
+        public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
         {
-           
-                var companies =  await _repository.Company.GetAllCompanies(trackchanges: false);
+                var companies =  await _repository.Company.GetAllCompanies(companyParameters, trackchanges: false);
                 var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);            
                 return Ok(companiesDto);
           

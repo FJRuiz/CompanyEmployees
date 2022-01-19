@@ -33,7 +33,7 @@ namespace CompanyEmployees.ActionFilters
             }
 
             var id = (Guid)context.ActionArguments["id"];
-            var employeeDb = await _repository.Employee.GetEmployee(companyId, id, trackChanges: false);
+            var employeeDb = await _repository.Employee.GetEmployeeAsync(companyId, id, trackChanges: false);
             if (employeeDb == null)
             {
                 _logger.LogInfo($"employee with id: {id} doesn't exist in the DataBase");
